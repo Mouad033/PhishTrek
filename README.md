@@ -1,198 +1,141 @@
-# ![PhishTrek Logo](https://raw.githubusercontent.com/Mouad033/PhishTrek/main/assets/phishtrek_logo.png)
+# PhishTrek: Offensive-to-Defensive Cyber Resilience Platform
 
-PhishTrek
-=========
+**PhishTrek** is an advanced engineering platform designed to bridge the gap between **Red Teaming** (Simulation) and **Blue Teaming** (Defense). Unlike traditional phishing simulators, PhishTrek uses Generative AI to create polymorphic attacks, tests them against real defenses, and **automatically engineers detection rules (Sigma)** to close security gaps.
 
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Status: Development](https://img.shields.io/badge/Status-Development-orange.svg)
-![Build Status](https://github.com/Mouad033/PhishTrek/workflows/CI/badge.svg)
+> **Master's Engineering Project (PFE)** - ESME
+> *Developed by Mouad BENTEFRIT & Sofiane BENNEDJIMA*
 
-**PhishTrek: AI-Powered Phishing Testing & Defense Improvement Platform**
+-----
 
-[PhishTrek](https://github.com/Mouad033/PhishTrek) is an open-source platform designed for security teams and penetration testers. It provides the ability to quickly generate realistic AI-powered phishing campaigns, automatically test defenses, and instantly generate security rules for SIEM systems.
+## 🚀 Key Features
 
-### Features
+### 🧠 1. GenAI Content Engine (Offensive)
 
-- **AI-Powered Generation**: Create 30+ realistic phishing email variants in 2 minutes using GPT-4, Claude, or Ollama
-- **Automatic Detection Testing**: Scan generated emails against your security tools
-- **Instant Rule Generation**: Auto-generate Sigma rules ready for Splunk, Elastic, or other SIEM systems
-- **Closed-Loop Feedback**: Continuous improvement cycle from attack generation to defense enhancement
-- **Interactive Dashboard**: Real-time metrics, detection rates, and actionable insights
-- **Multi-LLM Support**: Use OpenAI API, Claude API, or run Ollama locally (no internet required)
+- **Polymorphic Attacks:** Generate 30+ unique email variants from a single prompt using OpenAI (GPT-4) or Ollama (Local).
+- **Context-Aware:** Inject specific personas (e.g., "Finance Manager"), tones (Urgent, Authoritative), and contexts.
+- **Safety Guardrails:** Automatic sanitization of generated content to prevent misuse.
 
-### Install
+### 🛡️ 2. Automated Defense Testing (Defensive)
 
-Installation of PhishTrek is straightforward - just download and extract the repository:
+- **Pre-Flight Checks:** Analyze landing pages against **VirusTotal** API (70+ vendors) before launch.
+- **Stylometry Analysis:** Detect "AI-written" patterns in emails using NLP to anticipate defensive blocking.
+- **Header Analysis:** Simulate SPF/DKIM/DMARC checks.
 
-```bash
-git clone https://github.com/Mouad033/PhishTrek.git
-cd PhishTrek
+### ⚙️ 3. Industrial Orchestration
+
+- **GoPhish Wrapper:** Fully automated integration with GoPhish via API (no manual campaign creation).
+- **Batch Processing:** Handle complex 1-to-N campaign mappings (1 Logic Campaign = 30 Technical Variants).
+- **Smart Polling:** Real-time tracking of Opens, Clicks, and Submissions.
+
+### 📝 4. Auto-Remediation (The "Crown Jewel")
+
+- **Sigma Rule Generator:** Automatically converts attack patterns (Logs) into **Sigma Rules**.
+- **Multi-SIEM Export:** Deploy rules instantly to Splunk, Elastic, or Microsoft Sentinel.
+- **Feedback Loop:** The system learns from successful evasions to propose stronger rules.
+
+-----
+
+## 📚 Technical Documentation (Modules)
+
+The platform architecture is divided into **6 sequential modules**. Click below for detailed engineering specs and sequence diagrams:
+
+| Phase | Module | Description |
+| :--- | :--- | :--- |
+| **01** | [**Authentication & Validation**](https://www.google.com/search?q=docs/readme/01_authentication_domain_validation_system.md) | Zero-trust access, professional domain validation (DNS/Whois). |
+| **02** | [**GenAI Content Engine**](https://www.google.com/search?q=docs/readme/02_genai_content_engine.md) | Prompt engineering, JSON validation, and template generation. |
+| **03** | [**Campaign Orchestration**](https://www.google.com/search?q=docs/readme/03_gophish_campaign_orchestration.md) | GoPhish API wrapper, batch injection, and event tracking. |
+| **04** | [**Detection Pipeline**](https://www.google.com/search?q=docs/readme/04_detection_analysis_pipeline.md) | VirusTotal integration, heuristics, and NLP analysis. |
+| **05** | [**Sigma Rule Engineering**](https://www.google.com/search?q=docs/readme/05_automated_sigma_rule_generation.md) | **Core Innovation.** Clustering logs to generate valid Sigma YAML. |
+| **06** | [**KPI Dashboard**](https://www.google.com/search?q=docs/readme/06_kpi_dashboard_reporting.md) | CISO analytics, Phish-Prone Percentage, and PDF reporting. |
+
+-----
+
+## 🏗️ Architecture Overview
+
+The system follows a continuous feedback loop: **Attack $\rightarrow$ Analyze $\rightarrow$ Protect**.
+
+```mermaid
+graph LR
+    A[User / Red Team] -->|Prompt| B(GenAI Engine);
+    B -->|30 Variants| C{Orchestrator};
+    C -->|Inject| D[GoPhish];
+    D -->|Send| E((Targets));
+    E -->|Clicks/Logs| C;
+    C -->|Artifacts| F[Detection Engine];
+    F -->|Analysis| G[Rule Architect];
+    G -->|Sigma Rules| H[Dashboard];
+    H -->|Deploy| I[SIEM / Blue Team];
 ```
 
-### Quick Start with Docker
+*(See [architecture.md](https://www.google.com/search?q=docs/architecture.md) for the high-level sequence diagram)*
 
-The fastest way to get started is with Docker:
+-----
 
-```bash
-# Clone the repository
-git clone https://github.com/Mouad033/PhishTrek.git
-cd PhishTrek
+## 🛠️ Tech Stack
 
-# Start the application
-docker-compose up -d
+* **Backend:** Python 3.11, **FastAPI** (Async API), **Celery** (Background Jobs).
+* **Frontend:** Modular JavaScript (ES6+), **Chart.js**, Tailwind CSS.
+* **Core Engine:** **GoPhish** (Campaigns), **Ollama/OpenAI** (LLM), **VirusTotal** (Intel).
+* **Data & Infra:** PostgreSQL, Redis (Caching), Docker & Docker Compose.
 
-# Open browser
-Visit: http://localhost:3000
-```
+-----
 
-Default credentials and API configuration will be shown in the logs.
+## ⚡ Quick Start
 
-### Building From Source
+### Prerequisites
 
-PhishTrek requires Python 3.10+ and Node.js 18+
+* Docker & Docker Compose
+* OpenAI API Key (Optional, can use Ollama)
+* VirusTotal API Key (Free tier works)
 
-**Backend Setup:**
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+### Installation
 
-**Frontend Setup:**
-```bash
-cd frontend
-npm install
-npm run dev
-```
+1.  **Clone the repository:**
 
-### Setup
+    ```bash
+    git clone https://github.com/Mouad033/PhishTrek.git
+    cd PhishTrek
+    ```
 
-After starting PhishTrek with Docker, open your browser to `http://localhost:3000` and login with the default credentials shown in the logs.
+2.  **Configure Environment:**
+    Copy the example env file and fill in your keys.
 
-**Your first phishing test:**
-1. Click "Generate Phishing Campaign"
-2. Choose a target persona (e.g., "Finance Manager")
-3. Click "Generate" - wait 2 minutes for AI to create variants
-4. View automatic detection results
-5. Export ready-to-deploy security rules
+    ```bash
+    cp .env.example .env
+    # Edit .env to add GOPHISH_API_KEY and API keys
+    ```
 
-### Documentation
+3.  **Launch with Docker:**
 
-Complete documentation is available on our [GitHub Wiki](https://github.com/Mouad033/PhishTrek/wiki). Find something missing? Let us know by filing an issue!
+    ```bash
+    docker-compose up -d --build
+    ```
 
-Key documentation:
-- **[SETUP.md](docs/SETUP.md)** - Installation & local development
-- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design & technical details
-- **[API_SPEC.md](docs/API_SPEC.md)** - Complete API reference
-- **[CONTRIBUTING.md](docs/CONTRIBUTING.md)** - How to contribute
+4.  **Access the Platform:**
 
-### API Integration
+    * **PhishTrek Dashboard:** `http://localhost:8000` (or configured port)
+    * **GoPhish Admin:** `https://localhost:3333`
+    * **API Docs (Swagger):** `http://localhost:8000/docs`
 
-For teams wanting to integrate PhishTrek with other tools:
+-----
 
-```bash
-# Generate phishing emails
-POST /api/v1/generator/phishing
+## ⚖️ Ethical & Legal Disclaimer
 
-# Analyze email for phishing
-POST /api/v1/detector/analyze
+**PhishTrek is a defensive security tool.**
 
-# Generate Sigma rules
-POST /api/v1/rules/generate
+* **Authorization:** Only use this tool on systems you own or have explicit written permission to test.
+* **No Harm:** The AI engine includes safety filters to prevent the generation of actual malware or harmful payloads.
+* **Responsibility:** The authors are not responsible for any misuse of this software. It is intended for educational purposes and authorized security testing (Red/Blue Teaming) only.
 
-# Get dashboard metrics
-GET /api/v1/dashboard/metrics
-```
+-----
 
-Full API documentation: See [API_SPEC.md](docs/API_SPEC.md)
+## 👥 Authors
 
-### Use Cases
+**ESME Engineering School - Class of 2025**
 
-| Role | Benefit |
-|------|---------|
-| **Red Team / Penetration Testers** | Test client defenses 10x faster with AI-generated variants |
-| **SOC Analysts** | Validate detection rules before SIEM deployment |
-| **SIEM Engineers** | Get production-ready Sigma rules automatically |
-| **Security Awareness Trainers** | Create realistic phishing scenarios for employee training |
-| **Compliance Teams** | Meet regulatory testing requirements (NIS2, GDPR) |
+* **Mouad BENTEFRIT**
+* **Sofiane BENNEDJIMA** 
 
-### Issues
+-----
 
-Find a bug? Want more features? Have a suggestion? Let us know! Please don't hesitate to [file an issue](https://github.com/Mouad033/PhishTrek/issues/new) and we'll get right on it.
-
-### Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
-
-**Quick start for developers:**
-```bash
-git checkout -b feature/your-feature
-git commit -m "feat: your description"
-git push origin feature/your-feature
-# Create Pull Request on GitHub
-```
-
-### Support & Questions
-
-- **Documentation**: [docs/](docs/)
-- **Issues & Bugs**: [GitHub Issues](https://github.com/Mouad033/PhishTrek/issues)
-- **Feature Requests**: [GitHub Discussions](https://github.com/Mouad033/PhishTrek/discussions)
-
-### Security Notice
-
-PhishTrek is designed **ONLY** for authorized security testing. Before using:
-- Ensure written authorization from system owners
-- Use only in controlled, sandboxed environments
-- Never target external systems without explicit consent
-- Comply with local laws and regulations
-
-Unauthorized phishing is illegal. Use responsibly.
-
-### License
-```sql
-PhishTrek - AI-Powered Phishing Testing Platform
-
-The MIT License (MIT)
-
-Copyright (c) 2025 Mouad BENTEFRIT & Sofiane BENNEDJIMA
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-```
-
-### Team
-
-Built with love by ESME MSI students:
-- **Mouad BENTEFRIT** (Developer)
-- **Sofiane BENNEDJIMA** (Developer)
-
-Institution: ESME 
-Location: Paris, France
-Year: 2024-2025
-
----
-
-Made with ❤️ for better cybersecurity
-
-*Making security testing faster, smarter, and more effective*
-
----
-
-Last Updated: November 11, 2025
+*Made with ❤️ for better Cyber Resilience.*
